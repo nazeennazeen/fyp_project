@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Bookings — WanderVista</title>
+  <meta name="description" content="Look up your booking using your email and booking reference number." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">🌍</span>
+        Wander<span>Vista</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/tours.html">Tours</a></li>
+        <li><a href="/my-bookings.html" class="active">My Bookings</a></li>
+        <li><a href="/admin.html" class="btn btn-primary btn-sm">Admin</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="page-header">
+    <div class="container page-header-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span>›</span>
+        <span>My Bookings</span>
+      </div>
+      <h1>My Bookings</h1>
+      <p>Find your reservation using your email and booking reference</p>
+    </div>
+  </header>
+
+  <!-- ===== LOOKUP SECTION ===== -->
+  <section class="section-padding">
+    <div class="container">
+
+      <div class="lookup-card">
+        <h2 style="font-size:1.3rem;margin-bottom:0.4rem;font-family:var(--font-heading);">Find Your Booking</h2>
+        <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1.5rem;">Enter the email you used when booking and your booking reference number.</p>
+
+        <div id="lookupError" class="alert alert-error" style="display:none;"></div>
+
+        <form id="lookupForm" novalidate>
+          <div class="form-group">
+            <label for="lookupEmail">Email Address *</label>
+            <input type="email" id="lookupEmail" placeholder="john@example.com" required />
+          </div>
+          <div class="form-group">
+            <label for="lookupRef">Booking Reference *</label>
+            <input type="text" id="lookupRef" placeholder="e.g. A1B2C3D4" required style="text-transform:uppercase;" />
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;" id="lookupBtn">
+            Find My Booking
+          </button>
+        </form>
+      </div>
+
+      <!-- Booking Result (shown after lookup) -->
+      <div id="bookingResult" style="display:none;">
+        <div class="booking-result-card">
+          <div class="booking-result-header">
+            <div>
+              <h3 id="resultTourName">—</h3>
+              <p style="font-size:0.85rem;opacity:0.8;margin-top:0.2rem;" id="resultLocation"></p>
+            </div>
+            <span class="badge" id="resultStatus"></span>
+          </div>
+          <div class="booking-result-body">
+            <div class="booking-detail-row">
+              <span class="booking-detail-label">Booking Reference</span>
+              <span class="booking-detail-value" id="resultRef" style="font-family:monospace;letter-spacing:0.1em;"></span>
+            </div>
+            <div class="booking-detail-row">
+              <span class="booking-detail-label">Name</span>
+              <span class="booking-detail-value" id="resultName"></span>
+            </div>
+            <div class="booking-detail-row">
+              <span class="booking-detail-label">Email</span>
+              <span class="booking-detail-value" id="resultEmail"></span>
+            </div>
+            <div class="booking-detail-row">
+              <span class="booking-detail-label">Phone</span>
+              <span class="booking-detail-value" id="resultPhone"></span>
+            </div>
+            <div class="booking-detail-row">
+              <span class="booking-detail-label">Number of People</span>
+              <span class="booking-detail-value" id="resultPeople"></span>
+            </div>
+            <div class="booking-detail-row">
+              <span class="booking-detail-label">Booking Date</span>
+              <span class="booking-detail-value" id="resultDate"></span>
+            </div>
+            <div class="booking-detail-row">
+              <span class="booking-detail-label">Total Price</span>
+              <span class="booking-detail-value" id="resultTotal" style="color:var(--primary);font-size:1.1rem;"></span>
+            </div>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:1.5rem;">
+          <button class="btn btn-outline" id="searchAgainBtn">Search Another Booking</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">🌍 Wander<span>Vista</span></div>
+          <p>We create extraordinary travel experiences that inspire, connect, and transform.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/tours.html">All Tours</a></li>
+            <li><a href="/my-bookings.html">My Bookings</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul class="footer-links">
+            <li>📧 hello@wandervista.com</li>
+            <li>📞 +1 (800) 123-4567</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 WanderVista. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/main.js"></script>
+  <script>
+    // --- My Bookings Page Logic ---
+    const lookupForm   = document.getElementById('lookupForm');
+    const lookupError  = document.getElementById('lookupError');
+    const bookingResult = document.getElementById('bookingResult');
+    const lookupCard   = document.querySelector('.lookup-card');
+    const searchAgainBtn = document.getElementById('searchAgainBtn');
+
+    lookupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      lookupError.style.display = 'none';
+
+      const email = document.getElementById('lookupEmail').value.trim();
+      const ref   = document.getElementById('lookupRef').value.trim().toUpperCase();
+
+      if (!email || !ref) {
+        lookupError.textContent = 'Please enter both your email and booking reference.';
+        lookupError.style.display = 'flex';
+        return;
+      }
+
+      const btn = document.getElementById('lookupBtn');
+      btn.textContent = 'Searching…';
+      btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/bookings/lookup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, bookingReference: ref }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          lookupError.textContent = data.message || 'No booking found.';
+          lookupError.style.display = 'flex';
+          return;
+        }
+
+        // Populate result card
+        const tour = data.tourId;
+        document.getElementById('resultTourName').textContent = tour ? tour.title : 'N/A';
+        document.getElementById('resultLocation').textContent = tour ? '📍 ' + tour.location : '';
+        document.getElementById('resultRef').textContent  = data.bookingReference;
+        document.getElementById('resultName').textContent  = data.fullName;
+        document.getElementById('resultEmail').textContent = data.email;
+        document.getElementById('resultPhone').textContent = data.phone;
+        document.getElementById('resultPeople').textContent = data.numberOfPeople + ' person(s)';
+        document.getElementById('resultDate').textContent  = new Date(data.bookingDate).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+        document.getElementById('resultTotal').textContent = '$' + data.totalPrice.toLocaleString();
+
+        // Status badge
+        const statusEl = document.getElementById('resultStatus');
+        statusEl.textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+        statusEl.className = 'badge badge-' + data.status;
+
+        // Show result, hide form
+        lookupCard.style.display = 'none';
+        bookingResult.style.display = 'block';
+
+      } catch (err) {
+        lookupError.textContent = 'Could not connect to the server. Please try again.';
+        lookupError.style.display = 'flex';
+      } finally {
+        btn.textContent = 'Find My Booking';
+        btn.disabled = false;
+      }
+    });
+
+    // "Search again" button resets the view
+    searchAgainBtn.addEventListener('click', () => {
+      bookingResult.style.display = 'none';
+      lookupCard.style.display = 'block';
+      lookupForm.reset();
+    });
+  </script>
+</body>
+</html>
