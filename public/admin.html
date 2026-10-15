@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — WanderVista</title>
+  <meta name="description" content="Admin dashboard for managing tours and bookings." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- ===== ADMIN LOGIN PAGE ===== -->
+  <div id="loginPage" class="admin-login-wrap">
+    <div class="admin-login-card">
+      <div class="admin-login-logo">🌍 Wander<span>Vista</span></div>
+      <p class="admin-login-subtitle">Admin Dashboard — Secure Login</p>
+
+      <div id="loginError" class="alert alert-error" style="display:none;"></div>
+
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="adminUsername">Username</label>
+          <input type="text" id="adminUsername" placeholder="Enter admin username" required autocomplete="username" />
+        </div>
+        <div class="form-group">
+          <label for="adminPassword">Password</label>
+          <input type="password" id="adminPassword" placeholder="Enter password" required autocomplete="current-password" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:0.5rem;" id="loginBtn">
+          Sign In
+        </button>
+      </form>
+      <div style="text-align:center;margin-top:1.2rem;">
+        <a href="/" style="font-size:0.88rem;color:var(--text-muted);">← Back to website</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ADMIN DASHBOARD (hidden until logged in) ===== -->
+  <div id="dashboardPage" style="display:none;">
+
+    <!-- Top Navbar -->
+    <nav class="navbar">
+      <div class="container nav-inner">
+        <a href="/" class="nav-logo">
+          <span class="logo-icon">🌍</span>
+          Wander<span>Vista</span>
+          <span style="font-size:0.7rem;background:var(--primary-light);color:var(--primary);padding:2px 8px;border-radius:50px;margin-left:0.5rem;font-weight:700;">ADMIN</span>
+        </a>
+        <div style="display:flex;align-items:center;gap:1rem;">
+          <a href="/" style="font-size:0.88rem;color:var(--text-muted);">← View Site</a>
+          <button class="btn btn-outline btn-sm" id="logoutBtn">Logout</button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Admin Layout -->
+    <div class="admin-layout">
+
+      <!-- Sidebar -->
+      <aside class="admin-sidebar">
+        <p class="admin-sidebar-title">Overview</p>
+        <div class="admin-nav-link active" data-section="overview">📊 &nbsp;Dashboard</div>
+
+        <p class="admin-sidebar-title">Tours</p>
+        <div class="admin-nav-link" data-section="toursList">📋 &nbsp;All Tours</div>
+        <div class="admin-nav-link" data-section="addTour">➕ &nbsp;Add New Tour</div>
+
+        <p class="admin-sidebar-title">Bookings</p>
+        <div class="admin-nav-link" data-section="bookingsList">🗓️ &nbsp;All Bookings</div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="admin-content">
+
+        <!-- ====== SECTION: Overview ====== -->
+        <div class="admin-section active" id="section-overview">
+          <h2 class="admin-page-title">📊 Dashboard Overview</h2>
+          <div class="admin-stats-grid">
+            <div class="stat-card">
+              <div class="stat-card-icon blue">🗺️</div>
+              <div>
+                <div class="stat-card-value" id="statTotalTours">—</div>
+                <div class="stat-card-label">Total Tours</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-icon green">✅</div>
+              <div>
+                <div class="stat-card-value" id="statTotalBookings">—</div>
+                <div class="stat-card-label">Total Bookings</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-icon amber">⏳</div>
+              <div>
+                <div class="stat-card-value" id="statPending">—</div>
+                <div class="stat-card-label">Pending</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-icon red">💰</div>
+              <div>
+                <div class="stat-card-value" id="statRevenue">—</div>
+                <div class="stat-card-label">Total Revenue</div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info">Welcome to the admin dashboard. Use the sidebar to manage tours and customer bookings.</div>
+        </div>
+
+        <!-- ====== SECTION: Tours List ====== -->
+        <div class="admin-section" id="section-toursList">
+          <h2 class="admin-page-title">
+            📋 All Tours
+            <button class="btn btn-primary btn-sm" style="margin-left:auto;" id="goAddTourBtn">+ Add Tour</button>
+          </h2>
+
+          <div id="toursTableWrap">
+            <div class="spinner"><div class="spinner-ring"></div></div>
+          </div>
+        </div>
+
+        <!-- ====== SECTION: Add / Edit Tour ====== -->
+        <div class="admin-section" id="section-addTour">
+          <h2 class="admin-page-title" id="tourFormTitle">➕ Add New Tour</h2>
+
+          <div class="admin-card">
+            <div id="tourFormMsg" style="display:none;margin-bottom:1rem;"></div>
+
+            <form id="tourForm" novalidate>
+              <input type="hidden" id="editTourId" />
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fTitle">Tour Name *</label>
+                  <input type="text" id="fTitle" placeholder="e.g. Santorini Escape" required />
+                </div>
+                <div class="form-group">
+                  <label for="fLocation">Location *</label>
+                  <input type="text" id="fLocation" placeholder="e.g. Santorini, Greece" required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="fDescription">Description *</label>
+                <textarea id="fDescription" rows="4" placeholder="Describe the tour…" required></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fPrice">Price per Person ($) *</label>
+                  <input type="number" id="fPrice" min="0" placeholder="1299" required />
+                </div>
+                <div class="form-group">
+                  <label for="fDuration">Duration *</label>
+                  <input type="text" id="fDuration" placeholder="e.g. 7 Days / 6 Nights" required />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="fSeats">Available Seats *</label>
+                  <input type="number" id="fSeats" min="0" placeholder="20" required />
+                </div>
+                <div class="form-group">
+                  <label for="fImageUrl">Image URL</label>
+                  <input type="text" id="fImageUrl" placeholder="Paste URL or upload below" />
+                </div>
+              </div>
+
+              <!-- Image Upload to Backblaze B2 -->
+              <div class="admin-card" style="background:var(--bg-light);margin-bottom:1rem;">
+                <p style="font-size:0.88rem;font-weight:600;margin-bottom:0.75rem;">📤 Upload Image to Backblaze B2</p>
+                <input type="file" id="imageFileInput" accept="image/jpeg,image/png,image/webp" style="margin-bottom:0.5rem;" />
+                <button type="button" class="btn btn-outline btn-sm" id="uploadImageBtn">Upload Image</button>
+                <p class="upload-status" id="uploadStatus"></p>
+                <p style="font-size:0.8rem;color:var(--text-muted);margin-top:0.4rem;">Accepted: JPG, PNG, WebP · Max 5 MB</p>
+              </div>
+
+              <input type="hidden" id="fImageKey" />
+
+              <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+                <button type="submit" class="btn btn-primary" id="saveTourBtn">Save Tour</button>
+                <button type="button" class="btn btn-outline" id="cancelEditBtn" style="display:none;">Cancel Edit</button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- ====== SECTION: Bookings List ====== -->
+        <div class="admin-section" id="section-bookingsList">
+          <h2 class="admin-page-title">🗓️ All Customer Bookings</h2>
+
+          <div id="bookingsTableWrap">
+            <div class="spinner"><div class="spinner-ring"></div></div>
+          </div>
+        </div>
+
+      </main>
+    </div><!-- end admin-layout -->
+  </div><!-- end dashboardPage -->
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>
