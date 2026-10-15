@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Tours — WanderVista</title>
+  <meta name="description" content="Browse all available tours and travel packages. Filter by name or location and find your perfect trip." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">🌍</span>
+        Wander<span>Vista</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/tours.html" class="active">Tours</a></li>
+        <li><a href="/my-bookings.html">My Bookings</a></li>
+        <li><a href="/admin.html" class="btn btn-primary btn-sm">Admin</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="page-header">
+    <div class="container page-header-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span>›</span>
+        <span>Tours</span>
+      </div>
+      <h1>Explore All Tours</h1>
+      <p>Find the perfect adventure from our collection of handpicked tours</p>
+    </div>
+  </header>
+
+  <!-- ===== SEARCH & TOURS ===== -->
+  <section class="section-padding">
+    <div class="container">
+
+      <!-- Search Bar -->
+      <div class="search-bar" style="margin-bottom:2.5rem;">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="🔍  Search by name or location…"
+        />
+        <button class="btn btn-primary" id="searchBtn">Search</button>
+        <button class="btn btn-outline" id="clearBtn">Clear</button>
+      </div>
+
+      <!-- Results count -->
+      <p id="resultsCount" style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1.5rem;"></p>
+
+      <!-- Tours Grid -->
+      <div class="tours-grid" id="toursGrid">
+        <div class="spinner"><div class="spinner-ring"></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">🌍 Wander<span>Vista</span></div>
+          <p>We create extraordinary travel experiences that inspire, connect, and transform.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/tours.html">All Tours</a></li>
+            <li><a href="/my-bookings.html">My Bookings</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul class="footer-links">
+            <li>📧 hello@wandervista.com</li>
+            <li>📞 +1 (800) 123-4567</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 WanderVista. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/tours.js"></script>
+</body>
+</html>
