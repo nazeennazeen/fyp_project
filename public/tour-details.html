@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tour Details — WanderVista</title>
+  <meta name="description" content="View full tour details and book your spot online." />
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-icon">🌍</span>
+        Wander<span>Vista</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Home</a></li>
+        <li><a href="/tours.html" class="active">Tours</a></li>
+        <li><a href="/my-bookings.html">My Bookings</a></li>
+        <li><a href="/admin.html" class="btn btn-primary btn-sm">Admin</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGE HEADER ===== -->
+  <header class="page-header">
+    <div class="container page-header-content">
+      <div class="breadcrumb">
+        <a href="/">Home</a>
+        <span>›</span>
+        <a href="/tours.html">Tours</a>
+        <span>›</span>
+        <span id="breadcrumbTitle">Tour Details</span>
+      </div>
+      <h1 id="headerTitle">Loading…</h1>
+      <p id="headerLocation"></p>
+    </div>
+  </header>
+
+  <!-- ===== TOUR CONTENT ===== -->
+  <section class="section-padding">
+    <div class="container">
+      <!-- Loading / Error state -->
+      <div id="loadingState" class="spinner"><div class="spinner-ring"></div></div>
+      <div id="errorState" style="display:none;">
+        <div class="alert alert-error">Could not load tour details. <a href="/tours.html">← Back to Tours</a></div>
+      </div>
+
+      <!-- Main content (hidden until data is loaded) -->
+      <div id="tourContent" style="display:none;">
+        <div class="tour-detail-grid">
+
+          <!-- Left Column: Image + Info -->
+          <div>
+            <div class="tour-detail-image">
+              <img id="tourImage" src="" alt="Tour image" />
+            </div>
+
+            <div class="tour-info-grid" style="margin-top:1.5rem;">
+              <div class="info-card">
+                <div class="info-icon">📍</div>
+                <div class="info-label">Location</div>
+                <div class="info-value" id="infoLocation">—</div>
+              </div>
+              <div class="info-card">
+                <div class="info-icon">💰</div>
+                <div class="info-label">Price / Person</div>
+                <div class="info-value" id="infoPrice">—</div>
+              </div>
+              <div class="info-card">
+                <div class="info-icon">🗓️</div>
+                <div class="info-label">Duration</div>
+                <div class="info-value" id="infoDuration">—</div>
+              </div>
+              <div class="info-card">
+                <div class="info-icon">🪑</div>
+                <div class="info-label">Available Seats</div>
+                <div class="info-value" id="infoSeats">—</div>
+              </div>
+            </div>
+
+            <div style="margin-top:1.5rem;">
+              <h2 style="font-size:1.25rem;margin-bottom:0.75rem;">About This Tour</h2>
+              <p id="tourDescription" style="line-height:1.85;color:var(--text-body);"></p>
+            </div>
+          </div>
+
+          <!-- Right Column: Booking Form -->
+          <div>
+            <div class="booking-card">
+              <h3>📋 Book This Tour</h3>
+
+              <!-- Booking confirmation (shown after successful booking) -->
+              <div id="bookingSuccess" style="display:none;">
+                <div class="alert alert-success">
+                  <div>
+                    <strong>🎉 Booking Confirmed!</strong><br/>
+                    Your booking reference is:<br/>
+                    <strong id="bookingRefDisplay" style="font-size:1.15rem;letter-spacing:0.1em;"></strong>
+                  </div>
+                </div>
+                <p style="font-size:0.88rem;color:var(--text-muted);margin-top:0.5rem;">
+                  Save this reference number. You can use it on the <a href="/my-bookings.html" style="color:var(--primary);">My Bookings</a> page to look up your reservation.
+                </p>
+                <p style="font-size:0.88rem;color:var(--text-muted);margin-top:0.5rem;">
+                  Total charged: <strong id="totalPriceDisplay"></strong>
+                </p>
+              </div>
+
+              <!-- Booking form (hidden after success) -->
+              <div id="bookingFormWrap">
+                <div id="bookingError" class="alert alert-error" style="display:none;"></div>
+
+                <form id="bookingForm" novalidate>
+                  <!-- Tour ID is injected by JavaScript -->
+                  <input type="hidden" id="tourIdInput" />
+
+                  <div class="form-group">
+                    <label for="fullName">Full Name *</label>
+                    <input type="text" id="fullName" placeholder="John Doe" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" placeholder="john@example.com" required />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="phone">Phone Number *</label>
+                    <input type="tel" id="phone" placeholder="+1 555 000 0000" required />
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label for="numberOfPeople">No. of People *</label>
+                      <input type="number" id="numberOfPeople" min="1" value="1" required />
+                    </div>
+                    <div class="form-group">
+                      <label for="bookingDate">Preferred Date *</label>
+                      <input type="date" id="bookingDate" required />
+                    </div>
+                  </div>
+
+                  <!-- Live price preview -->
+                  <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.8rem 1rem;margin-bottom:1.2rem;font-size:0.9rem;">
+                    <div style="display:flex;justify-content:space-between;">
+                      <span>Price per person</span>
+                      <span id="pricePerPerson">—</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1rem;margin-top:0.4rem;padding-top:0.4rem;border-top:1px solid var(--border);">
+                      <span>Total</span>
+                      <span id="totalPrice" style="color:var(--primary);">—</span>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary" style="width:100%;" id="bookBtn">
+                    Book Now
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">🌍 Wander<span>Vista</span></div>
+          <p>We create extraordinary travel experiences that inspire, connect, and transform.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/tours.html">All Tours</a></li>
+            <li><a href="/my-bookings.html">My Bookings</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul class="footer-links">
+            <li>📧 hello@wandervista.com</li>
+            <li>📞 +1 (800) 123-4567</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2024 WanderVista. All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/js/booking.js"></script>
+</body>
+</html>
