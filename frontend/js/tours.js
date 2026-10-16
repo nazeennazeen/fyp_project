@@ -1,33 +1,39 @@
 // js/tours.js
-// Tours listing page — loads all tours from the API and handles search
+// Tours listing page — loads all tours and handles search
 
-// Base URL for the backend API (running on port 5000)
 const API_BASE = 'http://localhost:5000';
 
-// Mobile nav toggle (shared behaviour)
+// Navbar scroll
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// Mobile nav
 (function initNav() {
   const toggle = document.getElementById('navToggle');
   const links  = document.getElementById('navLinks');
   if (!toggle || !links) return;
   toggle.addEventListener('click', () => links.classList.toggle('open'));
-  links.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => links.classList.remove('open')));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
 })();
 
-const grid         = document.getElementById('toursGrid');
-const countEl      = document.getElementById('resultsCount');
-const searchInput  = document.getElementById('searchInput');
-const searchBtn    = document.getElementById('searchBtn');
-const clearBtn     = document.getElementById('clearBtn');
+const grid        = document.getElementById('toursGrid');
+const countEl     = document.getElementById('resultsCount');
+const searchInput = document.getElementById('searchInput');
+const searchBtn   = document.getElementById('searchBtn');
+const clearBtn    = document.getElementById('clearBtn');
 
-const fallbackImg  = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=70';
+const fallback = 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=600&q=70';
 
-// Build a single tour card
 function buildTourCard(tour) {
-  const imgSrc = tour.imageUrl || fallbackImg;
+  const img = tour.imageUrl || fallback;
+  const viewLabel  = window.t ? window.t('view_details') : 'View Details';
+  const seatsLabel = window.t ? window.t('seats_label')  : 'seats left';
+
   return `
     <div class="tour-card">
       <div class="tour-card-image">
-        <img src="${imgSrc}" alt="${tour.title}" loading="lazy" onerror="this.src='${fallbackImg}'" />
+        <img src="${img}" alt="${tour.title}" loading="lazy" onerror="this.src='${fallback}'" />
         <span class="tour-card-price">$${tour.price.toLocaleString()}</span>
       </div>
       <div class="tour-card-body">
@@ -38,61 +44,67 @@ function buildTourCard(tour) {
         <h3>${tour.title}</h3>
         <p>${tour.description}</p>
         <div class="tour-card-footer">
-          <span class="tour-meta">🕐 ${tour.duration} &nbsp;|&nbsp; 🪑 ${tour.availableSeats} seats</span>
-          <a href="/tour-details.html?id=${tour._id}" class="btn btn-primary btn-sm">View Details</a>
+          <span class="tour-meta">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            ${tour.duration}
+            &nbsp;·&nbsp;
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            ${tour.availableSeats} ${seatsLabel}
+          </span>
+          <a href="/tour-details.html?id=${tour._id}" class="btn btn-primary btn-sm">${viewLabel}</a>
         </div>
       </div>
     </div>
   `;
 }
 
-// Fetch tours from the API (with optional search query)
 async function loadTours(search = '') {
   grid.innerHTML = '<div class="spinner"><div class="spinner-ring"></div></div>';
   countEl.textContent = '';
 
   try {
-    const url = search ? `${API_BASE}/api/tours?search=${encodeURIComponent(search)}` : `${API_BASE}/api/tours`;
-    const res  = await fetch(url);
+    const url = search
+      ? `${API_BASE}/api/tours?search=${encodeURIComponent(search)}`
+      : `${API_BASE}/api/tours`;
+    const res = await fetch(url);
     if (!res.ok) throw new Error('API error');
     const tours = await res.json();
 
     if (tours.length === 0) {
       grid.innerHTML = `
-        <div class="empty-state" style="grid-column:1/-1;">
-          <div class="empty-icon">🔍</div>
-          <h3>No tours found</h3>
-          <p>${search ? `No results for "${search}". Try a different search term.` : 'No tours are available yet.'}</p>
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          </div>
+          <h3>${window.t ? window.t('no_tours') : 'No tours found'}</h3>
+          <p>${search ? (window.t ? `${window.t('no_tours_sub')}` : `No results for "${search}".`) : (window.t ? window.t('no_tours_sub') : 'No tours available yet.')}</p>
         </div>`;
-      countEl.textContent = '';
       return;
     }
 
     grid.innerHTML = tours.map(buildTourCard).join('');
-    countEl.textContent = `Showing ${tours.length} tour${tours.length !== 1 ? 's' : ''}${search ? ` for "${search}"` : ''}`;
 
-  } catch (err) {
-    grid.innerHTML = `<div class="alert alert-error" style="grid-column:1/-1;">Could not load tours. Make sure the server is running.</div>`;
+    const showing = window.t ? window.t('showing') : 'Showing';
+    const word    = tours.length === 1
+      ? (window.t ? window.t('tours_word') : 'tour')
+      : (window.t ? window.t('tours_word_pl') : 'tours');
+    const forTxt  = search ? ` ${window.t ? window.t('tour_for') : 'for'} "${search}"` : '';
+    countEl.textContent = `${showing} ${tours.length} ${word}${forTxt}`;
+
+  } catch {
+    grid.innerHTML = `
+      <div class="alert alert-error" style="grid-column:1/-1;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>${window.t ? window.t('server_error') : 'Could not load tours. Make sure the server is running.'}</span>
+      </div>`;
   }
 }
 
-// Handle search button click
-searchBtn.addEventListener('click', () => {
-  loadTours(searchInput.value.trim());
-});
+searchBtn.addEventListener('click', () => loadTours(searchInput.value.trim()));
+searchInput.addEventListener('keydown', e => { if (e.key === 'Enter') loadTours(searchInput.value.trim()); });
+clearBtn.addEventListener('click', () => { searchInput.value = ''; loadTours(); });
 
-// Handle Enter key in search box
-searchInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') loadTours(searchInput.value.trim());
-});
-
-// Clear search and reload all tours
-clearBtn.addEventListener('click', () => {
-  searchInput.value = '';
-  loadTours();
-});
-
-// On page load, check for a ?search= query parameter in the URL
+// Load on page start (check URL param)
 const urlParams = new URLSearchParams(window.location.search);
 const initialSearch = urlParams.get('search') || '';
 if (initialSearch) searchInput.value = initialSearch;

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,21 +10,27 @@
 <body>
 
   <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
+  <nav class="navbar" id="navbar">
     <div class="container nav-inner">
       <a href="/" class="nav-logo">
-        <span class="logo-icon">🌍</span>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         Wander<span>Vista</span>
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/">Home</a></li>
-        <li><a href="/tours.html" class="active">Tours</a></li>
-        <li><a href="/my-bookings.html">My Bookings</a></li>
-        <li><a href="/admin.html" class="btn btn-primary btn-sm">Admin</a></li>
+        <li><a href="/" data-i18n="nav_home">Home</a></li>
+        <li><a href="/tours.html" class="active" data-i18n="nav_tours">Tours</a></li>
+        <li><a href="/my-bookings.html" data-i18n="nav_bookings">My Bookings</a></li>
       </ul>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <div class="lang-switcher">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ku">KU</button>
+          <button class="lang-btn" data-lang="ar">AR</button>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -32,10 +38,10 @@
   <header class="page-header">
     <div class="container page-header-content">
       <div class="breadcrumb">
-        <a href="/">Home</a>
-        <span>›</span>
-        <a href="/tours.html">Tours</a>
-        <span>›</span>
+        <a href="/" data-i18n="nav_home">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <a href="/tours.html" data-i18n="nav_tours">Tours</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         <span id="breadcrumbTitle">Tour Details</span>
       </div>
       <h1 id="headerTitle">Loading…</h1>
@@ -46,17 +52,19 @@
   <!-- ===== TOUR CONTENT ===== -->
   <section class="section-padding">
     <div class="container">
-      <!-- Loading / Error state -->
       <div id="loadingState" class="spinner"><div class="spinner-ring"></div></div>
+
       <div id="errorState" style="display:none;">
-        <div class="alert alert-error">Could not load tour details. <a href="/tours.html">← Back to Tours</a></div>
+        <div class="alert alert-error">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Could not load tour details. <a href="/tours.html" style="color:inherit;text-decoration:underline;">Back to Tours</a></span>
+        </div>
       </div>
 
-      <!-- Main content (hidden until data is loaded) -->
       <div id="tourContent" style="display:none;">
         <div class="tour-detail-grid">
 
-          <!-- Left Column: Image + Info -->
+          <!-- Left: Image + Info -->
           <div>
             <div class="tour-detail-image">
               <img id="tourImage" src="" alt="Tour image" />
@@ -64,103 +72,118 @@
 
             <div class="tour-info-grid" style="margin-top:1.5rem;">
               <div class="info-card">
-                <div class="info-icon">📍</div>
-                <div class="info-label">Location</div>
+                <div class="info-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </div>
+                <div class="info-label" data-i18n="location_label">Location</div>
                 <div class="info-value" id="infoLocation">—</div>
               </div>
               <div class="info-card">
-                <div class="info-icon">💰</div>
-                <div class="info-label">Price / Person</div>
+                <div class="info-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+                <div class="info-label" data-i18n="price_label">Price / Person</div>
                 <div class="info-value" id="infoPrice">—</div>
               </div>
               <div class="info-card">
-                <div class="info-icon">🗓️</div>
-                <div class="info-label">Duration</div>
+                <div class="info-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <div class="info-label" data-i18n="duration_lbl">Duration</div>
                 <div class="info-value" id="infoDuration">—</div>
               </div>
               <div class="info-card">
-                <div class="info-icon">🪑</div>
-                <div class="info-label">Available Seats</div>
+                <div class="info-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                </div>
+                <div class="info-label" data-i18n="seats_lbl">Available Seats</div>
                 <div class="info-value" id="infoSeats">—</div>
               </div>
             </div>
 
-            <div style="margin-top:1.5rem;">
-              <h2 style="font-size:1.25rem;margin-bottom:0.75rem;">About This Tour</h2>
-              <p id="tourDescription" style="line-height:1.85;color:var(--text-body);"></p>
+            <div style="margin-top:2rem;">
+              <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:0.75rem;color:var(--text-heading);" data-i18n="about_tour">About This Tour</h2>
+              <p id="tourDescription" style="line-height:1.85;color:var(--text-body);font-size:0.95rem;"></p>
             </div>
           </div>
 
-          <!-- Right Column: Booking Form -->
+          <!-- Right: Booking Form -->
           <div>
             <div class="booking-card">
-              <h3>📋 Book This Tour</h3>
+              <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                <span data-i18n="book_title">Book This Tour</span>
+              </h3>
 
-              <!-- Booking confirmation (shown after successful booking) -->
+              <!-- Success state -->
               <div id="bookingSuccess" style="display:none;">
                 <div class="alert alert-success">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
                   <div>
-                    <strong>🎉 Booking Confirmed!</strong><br/>
-                    Your booking reference is:<br/>
-                    <strong id="bookingRefDisplay" style="font-size:1.15rem;letter-spacing:0.1em;"></strong>
+                    <strong data-i18n="booking_confirmed">Booking Confirmed!</strong><br>
+                    <span data-i18n="booking_ref_msg">Your booking reference is:</span><br>
+                    <strong id="bookingRefDisplay" style="font-size:1.1rem;letter-spacing:0.1em;font-family:monospace;"></strong>
                   </div>
                 </div>
-                <p style="font-size:0.88rem;color:var(--text-muted);margin-top:0.5rem;">
-                  Save this reference number. You can use it on the <a href="/my-bookings.html" style="color:var(--primary);">My Bookings</a> page to look up your reservation.
+                <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.75rem;">
+                  <span data-i18n="booking_save_msg">Save this reference. Use it on the</span>
+                  <a href="/my-bookings.html" style="color:var(--primary);font-weight:600;" data-i18n="booking_save_link">My Bookings</a>
+                  <span data-i18n="booking_save_end">page to look up your reservation.</span>
                 </p>
                 <p style="font-size:0.88rem;color:var(--text-muted);margin-top:0.5rem;">
-                  Total charged: <strong id="totalPriceDisplay"></strong>
+                  <span data-i18n="total_charged">Total charged:</span>
+                  <strong id="totalPriceDisplay" style="color:var(--primary);"></strong>
                 </p>
               </div>
 
-              <!-- Booking form (hidden after success) -->
+              <!-- Booking Form -->
               <div id="bookingFormWrap">
-                <div id="bookingError" class="alert alert-error" style="display:none;"></div>
+                <div id="bookingError" class="alert alert-error" style="display:none;margin-bottom:1rem;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                  <span id="bookingErrorText"></span>
+                </div>
 
                 <form id="bookingForm" novalidate>
-                  <!-- Tour ID is injected by JavaScript -->
                   <input type="hidden" id="tourIdInput" />
 
                   <div class="form-group">
-                    <label for="fullName">Full Name *</label>
+                    <label for="fullName" data-i18n="field_name">Full Name</label>
                     <input type="text" id="fullName" placeholder="John Doe" required />
                   </div>
-
                   <div class="form-group">
-                    <label for="email">Email Address *</label>
+                    <label for="email" data-i18n="field_email">Email Address</label>
                     <input type="email" id="email" placeholder="john@example.com" required />
                   </div>
-
                   <div class="form-group">
-                    <label for="phone">Phone Number *</label>
-                    <input type="tel" id="phone" placeholder="+1 555 000 0000" required />
+                    <label for="phone" data-i18n="field_phone">Phone Number</label>
+                    <input type="tel" id="phone" placeholder="+964 750 000 0000" required />
                   </div>
-
                   <div class="form-row">
                     <div class="form-group">
-                      <label for="numberOfPeople">No. of People *</label>
+                      <label for="numberOfPeople" data-i18n="field_people">Number of People</label>
                       <input type="number" id="numberOfPeople" min="1" value="1" required />
                     </div>
                     <div class="form-group">
-                      <label for="bookingDate">Preferred Date *</label>
+                      <label for="bookingDate" data-i18n="field_date">Preferred Date</label>
                       <input type="date" id="bookingDate" required />
                     </div>
                   </div>
 
-                  <!-- Live price preview -->
-                  <div style="background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.8rem 1rem;margin-bottom:1.2rem;font-size:0.9rem;">
-                    <div style="display:flex;justify-content:space-between;">
-                      <span>Price per person</span>
+                  <!-- Price Summary -->
+                  <div class="price-summary">
+                    <div class="price-row">
+                      <span data-i18n="price_per">Price per person</span>
                       <span id="pricePerPerson">—</span>
                     </div>
-                    <div style="display:flex;justify-content:space-between;font-weight:700;font-size:1rem;margin-top:0.4rem;padding-top:0.4rem;border-top:1px solid var(--border);">
-                      <span>Total</span>
-                      <span id="totalPrice" style="color:var(--primary);">—</span>
+                    <div class="price-row total">
+                      <span data-i18n="total">Total</span>
+                      <span id="totalPrice">—</span>
                     </div>
                   </div>
 
                   <button type="submit" class="btn btn-primary" style="width:100%;" id="bookBtn">
-                    Book Now
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><polyline points="16 21 12 17 8 21"/><polyline points="16 3 12 7 8 3"/></svg>
+                    <span data-i18n="btn_book">Book Now</span>
                   </button>
                 </form>
               </div>
@@ -177,31 +200,42 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="footer-logo">🌍 Wander<span>Vista</span></div>
-          <p>We create extraordinary travel experiences that inspire, connect, and transform.</p>
+          <div class="footer-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Wander<span>Vista</span>
+          </div>
+          <p data-i18n="footer_tagline">We create extraordinary travel experiences that inspire, connect, and transform.</p>
         </div>
         <div>
-          <h4>Quick Links</h4>
+          <h4 data-i18n="footer_quick">Quick Links</h4>
           <ul class="footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/tours.html">All Tours</a></li>
-            <li><a href="/my-bookings.html">My Bookings</a></li>
+            <li><a href="/" data-i18n="nav_home">Home</a></li>
+            <li><a href="/tours.html" data-i18n="nav_tours">Tours</a></li>
+            <li><a href="/my-bookings.html" data-i18n="nav_bookings">My Bookings</a></li>
           </ul>
         </div>
         <div>
-          <h4>Contact</h4>
+          <h4 data-i18n="footer_contact">Contact</h4>
           <ul class="footer-links">
-            <li>📧 hello@wandervista.com</li>
-            <li>📞 +1 (800) 123-4567</li>
+            <li class="footer-contact-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span data-i18n="footer_email">hello@wandervista.com</span>
+            </li>
+            <li class="footer-contact-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91A16 16 0 0 0 14.09 15.91l1.27-.76a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.3l.08-.38z"/></svg>
+              <span data-i18n="footer_phone">+964 750 000 0000</span>
+            </li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2024 WanderVista. All rights reserved.</span>
+        <span data-i18n="footer_copy">© 2025 WanderVista. All rights reserved.</span>
       </div>
     </div>
   </footer>
 
+  <script src="/js/i18n.js"></script>
   <script src="/js/booking.js"></script>
+  <script>initLangSwitcher();</script>
 </body>
 </html>

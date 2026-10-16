@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,21 +10,27 @@
 <body>
 
   <!-- ===== NAVBAR ===== -->
-  <nav class="navbar">
+  <nav class="navbar" id="navbar">
     <div class="container nav-inner">
       <a href="/" class="nav-logo">
-        <span class="logo-icon">🌍</span>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
         Wander<span>Vista</span>
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/">Home</a></li>
-        <li><a href="/tours.html" class="active">Tours</a></li>
-        <li><a href="/my-bookings.html">My Bookings</a></li>
-        <li><a href="/admin.html" class="btn btn-primary btn-sm">Admin</a></li>
+        <li><a href="/" data-i18n="nav_home">Home</a></li>
+        <li><a href="/tours.html" class="active" data-i18n="nav_tours">Tours</a></li>
+        <li><a href="/my-bookings.html" data-i18n="nav_bookings">My Bookings</a></li>
       </ul>
-      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <div class="lang-switcher">
+          <button class="lang-btn" data-lang="en">EN</button>
+          <button class="lang-btn" data-lang="ku">KU</button>
+          <button class="lang-btn" data-lang="ar">AR</button>
+        </div>
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
     </div>
   </nav>
 
@@ -32,12 +38,12 @@
   <header class="page-header">
     <div class="container page-header-content">
       <div class="breadcrumb">
-        <a href="/">Home</a>
-        <span>›</span>
-        <span>Tours</span>
+        <a href="/" data-i18n="nav_home">Home</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <span data-i18n="nav_tours">Tours</span>
       </div>
-      <h1>Explore All Tours</h1>
-      <p>Find the perfect adventure from our collection of handpicked tours</p>
+      <h1 data-i18n="page_tours_title">Explore All Tours</h1>
+      <p data-i18n="page_tours_sub">Find the perfect adventure from our collection of handpicked tours</p>
     </div>
   </header>
 
@@ -46,18 +52,21 @@
     <div class="container">
 
       <!-- Search Bar -->
-      <div class="search-bar" style="margin-bottom:2.5rem;">
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="🔍  Search by name or location…"
-        />
-        <button class="btn btn-primary" id="searchBtn">Search</button>
-        <button class="btn btn-outline" id="clearBtn">Clear</button>
+      <div style="display:flex; gap:1rem; align-items:center; flex-wrap:wrap; margin-bottom:2rem;">
+        <div class="search-bar" style="flex:1; min-width:260px; max-width:560px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--text-light);flex-shrink:0;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder" placeholder="Search by name or location…" />
+          <button class="btn btn-primary btn-sm" id="searchBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <span data-i18n="btn_search">Search</span>
+          </button>
+          <button class="btn btn-ghost btn-sm" id="clearBtn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <span data-i18n="btn_clear">Clear</span>
+          </button>
+        </div>
+        <p id="resultsCount" style="font-size:0.88rem;color:var(--text-muted);font-weight:500;"></p>
       </div>
-
-      <!-- Results count -->
-      <p id="resultsCount" style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1.5rem;"></p>
 
       <!-- Tours Grid -->
       <div class="tours-grid" id="toursGrid">
@@ -72,31 +81,42 @@
     <div class="container">
       <div class="footer-grid">
         <div class="footer-brand">
-          <div class="footer-logo">🌍 Wander<span>Vista</span></div>
-          <p>We create extraordinary travel experiences that inspire, connect, and transform.</p>
+          <div class="footer-logo">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Wander<span>Vista</span>
+          </div>
+          <p data-i18n="footer_tagline">We create extraordinary travel experiences that inspire, connect, and transform.</p>
         </div>
         <div>
-          <h4>Quick Links</h4>
+          <h4 data-i18n="footer_quick">Quick Links</h4>
           <ul class="footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/tours.html">All Tours</a></li>
-            <li><a href="/my-bookings.html">My Bookings</a></li>
+            <li><a href="/" data-i18n="nav_home">Home</a></li>
+            <li><a href="/tours.html" data-i18n="nav_tours">Tours</a></li>
+            <li><a href="/my-bookings.html" data-i18n="nav_bookings">My Bookings</a></li>
           </ul>
         </div>
         <div>
-          <h4>Contact</h4>
+          <h4 data-i18n="footer_contact">Contact</h4>
           <ul class="footer-links">
-            <li>📧 hello@wandervista.com</li>
-            <li>📞 +1 (800) 123-4567</li>
+            <li class="footer-contact-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              <span data-i18n="footer_email">hello@wandervista.com</span>
+            </li>
+            <li class="footer-contact-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.18 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91A16 16 0 0 0 14.09 15.91l1.27-.76a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.3l.08-.38z"/></svg>
+              <span data-i18n="footer_phone">+964 750 000 0000</span>
+            </li>
           </ul>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2024 WanderVista. All rights reserved.</span>
+        <span data-i18n="footer_copy">© 2025 WanderVista. All rights reserved.</span>
       </div>
     </div>
   </footer>
 
+  <script src="/js/i18n.js"></script>
   <script src="/js/tours.js"></script>
+  <script>initLangSwitcher();</script>
 </body>
 </html>

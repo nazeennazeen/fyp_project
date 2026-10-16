@@ -4,6 +4,20 @@
 // Base URL for the backend API (running on port 5000)
 const API_BASE = 'http://localhost:5000';
 
+// Navbar scroll shadow
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 10);
+});
+
+// Mobile nav
+(function initNav() {
+  const toggle = document.getElementById('navToggle');
+  const links  = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+  links.querySelectorAll('a').forEach(a => a.addEventListener('click', () => links.classList.remove('open')));
+})();
+
 // Mobile nav toggle
 (function initNav() {
   const toggle = document.getElementById('navToggle');
@@ -88,7 +102,8 @@ document.getElementById('numberOfPeople').addEventListener('input', updateTotalP
 document.getElementById('bookingForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const errorBox = document.getElementById('bookingError');
+  const errorBox  = document.getElementById('bookingError');
+  const errorText = document.getElementById('bookingErrorText');
   errorBox.style.display = 'none';
 
   const body = {
@@ -102,13 +117,13 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
 
   // Basic client-side validation
   if (!body.fullName || !body.email || !body.phone || !body.bookingDate) {
-    errorBox.textContent = 'Please fill in all required fields.';
+    errorText.textContent = window.t ? window.t('err_fill') : 'Please fill in all required fields.';
     errorBox.style.display = 'flex';
     return;
   }
 
   if (body.numberOfPeople < 1 || isNaN(body.numberOfPeople)) {
-    errorBox.textContent = 'Please enter at least 1 person.';
+    errorText.textContent = window.t ? window.t('err_people') : 'Please enter at least 1 person.';
     errorBox.style.display = 'flex';
     return;
   }
@@ -127,7 +142,7 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     const data = await res.json();
 
     if (!res.ok) {
-      errorBox.textContent = data.message || 'Booking failed. Please try again.';
+      errorText.textContent = data.message || 'Booking failed. Please try again.';
       errorBox.style.display = 'flex';
       return;
     }
@@ -141,11 +156,11 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
     // Scroll the booking card into view
     document.querySelector('.booking-card').scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-  } catch (err) {
-    errorBox.textContent = 'Could not connect to the server. Please try again.';
+  } catch {
+    errorText.textContent = window.t ? window.t('err_server') : 'Could not connect to the server. Please try again.';
     errorBox.style.display = 'flex';
   } finally {
-    bookBtn.textContent = 'Book Now';
+    bookBtn.querySelector('span').textContent = window.t ? window.t('btn_book') : 'Book Now';
     bookBtn.disabled = false;
   }
 });
