@@ -64,8 +64,8 @@ app.use(
   })
 );
 
-// Serve static frontend files from the /public directory
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static frontend files from the /frontend directory
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // --- API Routes ---
 app.use('/api/tours', tourRoutes);
@@ -76,7 +76,7 @@ app.use('/api/upload', uploadRoutes);
 // --- Catch-all: serve index.html for any unknown route ---
 // This ensures the frontend handles navigation for any page reload
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
 });
 
 // --- Start the server ---
