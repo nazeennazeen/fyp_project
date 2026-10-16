@@ -4,7 +4,8 @@
   "description": "Tourism Booking - Final Year Project (Monorepo)",
   "private": true,
   "scripts": {
+    "frontend": "cd frontend && npm run dev",
     "backend": "cd backend && npm run dev",
-    "install:backend": "cd backend && npm install"
+    "install:all": "cd backend && npm install && cd ../frontend && npm install"
   }
 }

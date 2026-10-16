@@ -1,6 +1,9 @@
 // js/booking.js
 // Tour Details page — loads tour data and handles the booking form
 
+// Base URL for the backend API (running on port 5000)
+const API_BASE = 'http://localhost:5000';
+
 // Mobile nav toggle
 (function initNav() {
   const toggle = document.getElementById('navToggle');
@@ -29,7 +32,7 @@ async function loadTourDetails() {
   }
 
   try {
-    const res = await fetch(`/api/tours/${tourId}`);
+    const res = await fetch(`${API_BASE}/api/tours/${tourId}`);
     if (!res.ok) throw new Error('Tour not found');
     const tour = await res.json();
 
@@ -115,7 +118,7 @@ document.getElementById('bookingForm').addEventListener('submit', async (e) => {
   bookBtn.disabled = true;
 
   try {
-    const res = await fetch('/api/bookings', {
+    const res = await fetch(`${API_BASE}/api/bookings`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),

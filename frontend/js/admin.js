@@ -1,6 +1,9 @@
 // js/admin.js
 // Admin dashboard logic: login, tour CRUD, image upload, bookings management
 
+// Base URL for the backend API (running on port 5000)
+const API_BASE = 'http://localhost:5000';
+
 // ---- State ----
 let editingTourId = null; // null = creating new, string = editing existing
 
@@ -48,7 +51,7 @@ const dashboardPage = document.getElementById('dashboardPage');
 // Check if the user already has an active admin session
 async function checkSession() {
   try {
-    const res = await fetch('/api/admin/check');
+    const res = await fetch(`${API_BASE}/api/admin/check`);
     if (res.ok) {
       showDashboard();
     }
@@ -78,7 +81,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   btn.disabled = true;
 
   try {
-    const res = await fetch('/api/admin/login', {
+    const res = await fetch(`${API_BASE}/api/admin/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -105,7 +108,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
 
 // Logout button
 document.getElementById('logoutBtn').addEventListener('click', async () => {
-  await fetch('/api/admin/logout', { method: 'POST' });
+  await fetch(`${API_BASE}/api/admin/logout`, { method: 'POST' });
   loginPage.style.display    = 'block';
   dashboardPage.style.display = 'none';
   document.getElementById('loginForm').reset();
@@ -117,8 +120,8 @@ document.getElementById('logoutBtn').addEventListener('click', async () => {
 async function loadOverviewStats() {
   try {
     const [toursRes, bookingsRes] = await Promise.all([
-      fetch('/api/tours'),
-      fetch('/api/admin/bookings'),
+      fetch(`${API_BASE}/api/tours`),
+      fetch(`${API_BASE}/api/admin/bookings`),
     ]);
 
     if (toursRes.ok) {
@@ -149,7 +152,7 @@ async function loadToursTable() {
   wrap.innerHTML = '<div class="spinner"><div class="spinner-ring"></div></div>';
 
   try {
-    const res  = await fetch('/api/tours');
+    const res  = await fetch(`${API_BASE}/api/tours`);
     const tours = await res.json();
 
     if (tours.length === 0) {
@@ -197,7 +200,7 @@ async function editTour(id) {
   showSection('addTour');
 
   try {
-    const res  = await fetch(`/api/tours/${id}`);
+    const res  = await fetch(`${API_BASE}/api/tours/${id}`);
     const tour = await res.json();
 
     editingTourId = id;
@@ -225,7 +228,7 @@ async function deleteTour(id, name) {
   if (!confirm(`Are you sure you want to delete "${name}"? This cannot be undone.`)) return;
 
   try {
-    const res = await fetch(`/api/tours/${id}`, { method: 'DELETE' });
+    const res = await fetch(`${API_BASE}/api/tours/${id}`, { method: 'DELETE' });
     const data = await res.json();
 
     if (res.ok) {
@@ -261,7 +264,7 @@ document.getElementById('tourForm').addEventListener('submit', async (e) => {
 
   try {
     const isEditing = !!editingTourId;
-    const url    = isEditing ? `/api/tours/${editingTourId}` : '/api/tours';
+    const url    = isEditing ? `${API_BASE}/api/tours/${editingTourId}` : `${API_BASE}/api/tours`;
     const method = isEditing ? 'PUT' : 'POST';
 
     const res  = await fetch(url, {
@@ -328,7 +331,7 @@ document.getElementById('uploadImageBtn').addEventListener('click', async () => 
   statusEl.textContent = '⏳ Uploading…';
 
   try {
-    const res  = await fetch('/api/upload', { method: 'POST', body: formData });
+    const res  = await fetch(`${API_BASE}/api/upload`, { method: 'POST', body: formData });
     const data = await res.json();
 
     if (!res.ok) {
@@ -354,7 +357,7 @@ async function loadBookingsTable() {
   wrap.innerHTML = '<div class="spinner"><div class="spinner-ring"></div></div>';
 
   try {
-    const res = await fetch('/api/admin/bookings');
+    const res = await fetch(`${API_BASE}/api/admin/bookings`);
     if (!res.ok) throw new Error('Unauthorized');
 
     const bookings = await res.json();
@@ -405,7 +408,7 @@ async function loadBookingsTable() {
         const newStatus = sel.value;
 
         try {
-          const res = await fetch(`/api/admin/bookings/${bookingId}`, {
+          const res = await fetch(`${API_BASE}/api/admin/bookings/${bookingId}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: newStatus }),

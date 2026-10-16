@@ -6,7 +6,6 @@ require('dotenv').config(); // Load environment variables from .env FIRST
 const express = require('express');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
-const path = require('path');
 const connectDB = require('./config/database');
 
 // Import route handlers
@@ -23,7 +22,7 @@ connectDB();
 
 // --- Middleware ---
 
-// CORS middleware allowing frontend at http://localhost:3000
+// CORS middleware — allows the frontend (port 3000) to call this API (port 5000)
 app.use((req, res, next) => {
   const allowedOrigins = ['http://localhost:3000', 'http://127.0.0.1:3000'];
   const origin = req.headers.origin;
@@ -64,22 +63,13 @@ app.use(
   })
 );
 
-// Serve static frontend files from the /frontend directory
-app.use(express.static(path.join(__dirname, '../frontend')));
-
 // --- API Routes ---
 app.use('/api/tours', tourRoutes);
 app.use('/api/bookings', bookingRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
 
-// --- Catch-all: serve index.html for any unknown route ---
-// This ensures the frontend handles navigation for any page reload
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
-});
-
 // --- Start the server ---
 app.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🚀 Backend API running at http://localhost:${PORT}`);
 });

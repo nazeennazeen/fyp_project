@@ -1,6 +1,9 @@
 // js/main.js
 // Shared utilities and homepage-specific logic
 
+// Base URL for the backend API (running on port 5000)
+const API_BASE = 'http://localhost:5000';
+
 // ---- Shared: Mobile nav toggle ----
 (function initNav() {
   const toggle = document.getElementById('navToggle');
@@ -52,7 +55,7 @@ function buildTourCard(tour) {
   if (!container) return; // Only runs on the homepage
 
   try {
-    const res = await fetch('/api/tours');
+    const res = await fetch(`${API_BASE}/api/tours`);
     if (!res.ok) throw new Error('Failed to load tours');
     const tours = await res.json();
 

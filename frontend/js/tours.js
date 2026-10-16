@@ -1,6 +1,9 @@
 // js/tours.js
 // Tours listing page — loads all tours from the API and handles search
 
+// Base URL for the backend API (running on port 5000)
+const API_BASE = 'http://localhost:5000';
+
 // Mobile nav toggle (shared behaviour)
 (function initNav() {
   const toggle = document.getElementById('navToggle');
@@ -49,7 +52,7 @@ async function loadTours(search = '') {
   countEl.textContent = '';
 
   try {
-    const url = search ? `/api/tours?search=${encodeURIComponent(search)}` : '/api/tours';
+    const url = search ? `${API_BASE}/api/tours?search=${encodeURIComponent(search)}` : `${API_BASE}/api/tours`;
     const res  = await fetch(url);
     if (!res.ok) throw new Error('API error');
     const tours = await res.json();
